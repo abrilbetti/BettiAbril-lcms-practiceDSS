@@ -2,10 +2,9 @@ package peak;
 
 public class Peak {
 
-    double mz; // TODO these two variables (mz and intensity) were declared as final but I got an error saying that they should be initialised !!
+    double mz;
     double intensity;
     double rt;
-    // !TODO SHOULD I HAVE AN ADDUCT ATTRIBUTE?
 
     /**
      * Empty constructor of the peak class

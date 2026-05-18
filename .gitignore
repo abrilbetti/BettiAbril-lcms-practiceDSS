@@ -1,2 +1,8 @@
 # Project exclude paths
-/target/
+# Block local SQLite data binaries
+*.db
+*.db-journal
+
+# Block target compilation build output directories
+target/
+*.class
