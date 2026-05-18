@@ -1,0 +1,126 @@
+package scoredAnnotation;
+
+unit AdductPatternScoringUnit;
+
+import scoredAnnotation.AdductPatternScoringUnit;
+
+rule "Alanine relative M+H intensity"
+when
+    $scoredAnnotation: /scoredAnnotations[
+        !hasCollectedAdductEvidence("alanine-[M+H]+"),
+        hasCompoundName("alanine"),
+        hasAdduct("[M+H]+")
+    ]
+then
+    double observedRelativeIntensity = $scoredAnnotation.getRelativeAdductIntensity("[M+H]+");
+    double score = AdductPatternScoringUnit.fuzzyScore(observedRelativeIntensity, 1.0);
+    $scoredAnnotation.addAdductEvidenceScore("alanine-[M+H]+", score);
+    update($scoredAnnotation);
+end
+
+rule "Alanine relative M+Na intensity"
+when
+    $scoredAnnotation: /scoredAnnotations[
+        !hasCollectedAdductEvidence("alanine-[M+Na]+"),
+        hasCompoundName("alanine"),
+        hasAdduct("[M+Na]+")
+    ]
+then
+    double observedRelativeIntensity = $scoredAnnotation.getRelativeAdductIntensity("[M+Na]+");
+    double score = AdductPatternScoringUnit.fuzzyScore(observedRelativeIntensity, 0.80);
+    $scoredAnnotation.addAdductEvidenceScore("alanine-[M+Na]+", score);
+    update($scoredAnnotation);
+end
+
+rule "Dopamine relative M+H intensity"
+when
+    $scoredAnnotation: /scoredAnnotations[
+        !hasCollectedAdductEvidence("dopamine-[M+H]+"),
+        hasCompoundName("dopamine"),
+        hasAdduct("[M+H]+")
+    ]
+then
+    double observedRelativeIntensity = $scoredAnnotation.getRelativeAdductIntensity("[M+H]+");
+    double score = AdductPatternScoringUnit.fuzzyScore(observedRelativeIntensity, 1.0);
+    $scoredAnnotation.addAdductEvidenceScore("dopamine-[M+H]+", score);
+    update($scoredAnnotation);
+end
+
+rule "Dopamine relative M+Na intensity"
+when
+    $scoredAnnotation: /scoredAnnotations[
+        !hasCollectedAdductEvidence("dopamine-[M+Na]+"),
+        hasCompoundName("dopamine"),
+        hasAdduct("[M+Na]+")
+    ]
+then
+    double observedRelativeIntensity = $scoredAnnotation.getRelativeAdductIntensity("[M+Na]+");
+    double score = AdductPatternScoringUnit.fuzzyScore(observedRelativeIntensity, 0.42);
+    $scoredAnnotation.addAdductEvidenceScore("dopamine-[M+Na]+", score);
+    update($scoredAnnotation);
+end
+
+rule "Dopamine relative M+NH4 intensity"
+when
+    $scoredAnnotation: /scoredAnnotations[
+        !hasCollectedAdductEvidence("dopamine-[M+NH4]+"),
+        hasCompoundName("dopamine"),
+        hasAdduct("[M+NH4]+")
+    ]
+then
+    double observedRelativeIntensity = $scoredAnnotation.getRelativeAdductIntensity("[M+NH4]+");
+    double score = AdductPatternScoringUnit.fuzzyScore(observedRelativeIntensity, 0.28);
+    $scoredAnnotation.addAdductEvidenceScore("dopamine-[M+NH4]+", score);
+    update($scoredAnnotation);
+end
+
+rule "Serotonin relative M+H intensity"
+when
+    $scoredAnnotation: /scoredAnnotations[
+        !hasCollectedAdductEvidence("serotonin-[M+H]+"),
+        hasCompoundName("serotonin"),
+        hasAdduct("[M+H]+")
+    ]
+then
+    double observedRelativeIntensity = $scoredAnnotation.getRelativeAdductIntensity("[M+H]+");
+    double score = AdductPatternScoringUnit.fuzzyScore(observedRelativeIntensity, 1.0);
+    $scoredAnnotation.addAdductEvidenceScore("serotonin-[M+H]+", score);
+    update($scoredAnnotation);
+end
+
+rule "Serotonin relative M+Na intensity"
+when
+    $scoredAnnotation: /scoredAnnotations[
+        !hasCollectedAdductEvidence("serotonin-[M+Na]+"),
+        hasCompoundName("serotonin"),
+        hasAdduct("[M+Na]+")
+    ]
+then
+    double observedRelativeIntensity = $scoredAnnotation.getRelativeAdductIntensity("[M+Na]+");
+    double score = AdductPatternScoringUnit.fuzzyScore(observedRelativeIntensity, 0.36);
+    $scoredAnnotation.addAdductEvidenceScore("serotonin-[M+Na]+", score);
+    update($scoredAnnotation);
+end
+
+rule "Serotonin relative M+NH4 intensity"
+when
+    $scoredAnnotation: /scoredAnnotations[
+        !hasCollectedAdductEvidence("serotonin-[M+NH4]+"),
+        hasCompoundName("serotonin"),
+        hasAdduct("[M+NH4]+")
+    ]
+then
+    double observedRelativeIntensity = $scoredAnnotation.getRelativeAdductIntensity("[M+NH4]+");
+    double score = AdductPatternScoringUnit.fuzzyScore(observedRelativeIntensity, 0.22);
+    $scoredAnnotation.addAdductEvidenceScore("serotonin-[M+NH4]+", score);
+    update($scoredAnnotation);
+end
+
+rule "No adduct hierarchy evidence collected"
+salience -100
+when
+    $scoredAnnotation: /scoredAnnotations[scoreAdduct == null]
+then
+    $scoredAnnotation.setScoreAdduct(-1.0);
+    update($scoredAnnotation);
+end

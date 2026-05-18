@@ -1,0 +1,55 @@
+package scoredAnnotation;
+
+unit RetentionTimeScoringUnit;
+
+import scoredAnnotation.RetentionTimeScoringUnit;
+
+
+rule "Higher logP elutes later"
+when
+    $higherLogP: /scoredAnnotations
+    $lowerLogP: /scoredAnnotations[
+        this != $higherLogP
+    ]
+    eval($higherLogP.isFromDifferentFeatureThan($lowerLogP))
+    eval($higherLogP.hasHigherLogPThan($lowerLogP))
+    eval($higherLogP.hasHigherRtThan($lowerLogP))
+then
+    boolean higherChanged = $higherLogP.addPositiveRtEvidenceFrom($lowerLogP);
+    boolean lowerChanged = $lowerLogP.addPositiveRtEvidenceFrom($higherLogP);
+    if (higherChanged) {
+        modify($higherLogP) {}
+    }
+    if (lowerChanged) {
+        modify($lowerLogP) {}
+    }
+end
+
+rule "Higher logP elutes earlier"
+when
+    $higherLogP: /scoredAnnotations
+    $lowerLogP: /scoredAnnotations[
+        this != $higherLogP
+    ]
+    eval($higherLogP.isFromDifferentFeatureThan($lowerLogP))
+    eval($higherLogP.hasHigherLogPThan($lowerLogP))
+    eval($higherLogP.hasLowerRtThan($lowerLogP))
+then
+    boolean higherChanged = $higherLogP.addNegativeRtEvidenceFrom($lowerLogP);
+    boolean lowerChanged = $lowerLogP.addNegativeRtEvidenceFrom($higherLogP);
+    if (higherChanged) {
+        update($higherLogP);
+    }
+    if (lowerChanged) {
+        update($lowerLogP);
+    }
+end
+
+rule "No RT evidence collected"
+salience -100
+when
+    $scoredAnnotation: /scoredAnnotations[scoreRT == null, !hasRtEvidence()]
+then
+    $scoredAnnotation.setScoreRT(-1.0); // -1.0 means no evidence was applied
+    update($scoredAnnotation);
+end
